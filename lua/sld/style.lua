@@ -1,3 +1,5 @@
+local colors = require('gruvbox-material.colors').get(vim.o.background, 'hard')
+
 require('gruvbox-material').setup {
   italics = false, -- enable italics in general
   contrast = 'hard', -- set contrast, can be any of "hard", "medium", "soft"
@@ -15,6 +17,95 @@ require('gruvbox-material').setup {
   signs = {
     highlight = true, -- whether to highlight signs
   },
-  customize = nil, -- customize the theme in any way you desire, see below what this
-  -- configuration accepts
+  customize = function(group, opt)
+    if group == '@type' then
+      opt.link = nil
+      opt.fg = colors.blue
+    end
+
+    if string.find(group, '.macro') then
+      opt.link = nil
+      opt.fg = colors.purple
+    end
+
+    if string.find(group, '@variable') then
+      opt.link = nil
+      opt.fg = nil
+    end
+
+    if group == '@string' then
+      opt.link = nil
+      opt.fg = colors.yellow
+    end
+
+    if group == '@keyword.modifier' then
+      opt.link = nil
+      opt.fg = colors.orange
+    end
+
+    if group == '@string.escape' then
+      opt.link = nil
+      opt.fg = colors.aqua
+    end
+
+    if group == '@property' then
+      opt.link = nil
+      opt.fg = nil
+    end
+
+    if group == '@module' then
+      opt.link = nil
+      opt.fg = colors.aqua
+    end
+
+    return opt
+  end,
+}
+
+require('lualine').setup {
+  options = {
+    icons_enabled = true,
+    theme = 'gruvbox-material',
+    component_separators = { left = '', right = '' },
+    section_separators = { left = '', right = '' },
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
+    },
+    ignore_focus = {},
+    always_divide_middle = true,
+    always_show_tabline = true,
+    globalstatus = false,
+    refresh = {
+      statusline = 100,
+      tabline = 100,
+      winbar = 100,
+    },
+  },
+  sections = {
+    lualine_a = { 'mode' },
+    lualine_b = { 'branch', 'diff', 'diagnostics' },
+    lualine_c = { 'filename' },
+    lualine_x = { 'encoding', 'fileformat', 'filetype' },
+    lualine_y = { 'progress' },
+    lualine_z = { 'location' },
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = { 'filename' },
+    lualine_x = { 'location' },
+    lualine_y = {},
+    lualine_z = {},
+  },
+  tabline = {},
+  winbar = {},
+  inactive_winbar = {},
+  extensions = {},
+}
+
+require('ibl').setup {
+  indent = {
+    char = '▏',
+  },
 }
