@@ -52,7 +52,6 @@ require('gruvbox-material').setup {
       opt.link = nil
       opt.fg = nil
     end
-
     if group == '@module' then
       opt.link = nil
       opt.fg = colors.aqua
@@ -61,6 +60,34 @@ require('gruvbox-material').setup {
     return opt
   end,
 }
+
+local mode_color = {
+  n = colors.green, -- normal mode -> green
+  i = colors.red, -- insert mode -> blue
+  v = colors.purple, -- visual mode -> purple
+  [''] = colors.purple, -- visual block
+  V = colors.purple, -- visual line
+  c = colors.blue, -- command mode -> yellow
+  no = colors.green,
+  s = colors.green,
+  S = colors.green,
+  [''] = colors.green,
+  ic = colors.red,
+  R = colors.orange, -- replace mode -> red
+  Rv = colors.orange,
+  cv = colors.blue,
+  ce = colors.blue,
+  r = colors.orange,
+  rm = colors.orange,
+  ['r?'] = colors.orange,
+  t = colors.green,
+}
+
+local function getModeColor()
+  local mode = vim.fn.mode()
+  local color = mode_color[mode] or colors.green
+  return color
+end
 
 require('lualine').setup {
   options = {
@@ -83,7 +110,9 @@ require('lualine').setup {
     },
   },
   sections = {
-    lualine_a = { 'mode' },
+    lualine_a = {
+      'mode',
+    },
     lualine_b = { 'branch', 'diff', 'diagnostics' },
     lualine_c = { 'filename' },
     lualine_x = { 'encoding', 'fileformat', 'filetype' },
@@ -108,4 +137,15 @@ require('ibl').setup {
   indent = {
     char = '▏',
   },
+}
+
+vim.api.nvim_set_hl(0, 'CursorNormal', { bg = colors.green })
+vim.api.nvim_set_hl(0, 'CursorInsert', { bg = colors.red })
+vim.api.nvim_set_hl(0, 'CursorVisual', { bg = colors.purple })
+vim.api.nvim_set_hl(0, 'CursorCommand', { bg = colors.blue })
+vim.opt.guicursor = {
+  'n:block-CursorNormal-blinkwait1000-blinkon100-blinkoff100',
+  'i:block-CursorInsert-blinkwait1000-blinkon100-blinkoff100',
+  'v:block-CursorVisual-blinkwait1000-blinkon100-blinkoff100',
+  'c-ci-cr:block-CursorCommand-blinkwait1000-blinkon100-blinkoff100',
 }
