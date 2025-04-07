@@ -771,6 +771,7 @@ require('lazy').setup({
   require 'sld.autopairs',
   require 'sld.lint',
   require 'sld.indent_line',
+  require 'sld.clangd-extensions',
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
